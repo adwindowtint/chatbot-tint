@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat } from '@google/genai';
-import { createChatSession } from '../services/geminiService.ts';
-import { Message } from '../types.ts';
-import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons.tsx';
+import { createChatSession } from '../services/geminiService';
+import { Message } from '../types';
+import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons';
 
 const formatText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
