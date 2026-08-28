@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chatbot } from './components/Chatbot.tsx';
+import { Chatbot } from './components/Chatbot';
 
 const App: React.FC = () => {
   return (
@@ -23,7 +23,6 @@ const App: React.FC = () => {
       {/* Hero Section */}
       <main className="flex-grow">
         <section className="relative bg-gray-900 text-white py-24 sm:py-32 px-6 sm:px-12 overflow-hidden">
-          {/* Background Image Overlay (Simulated with gradient for now, ideally an actual image) */}
           <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-gray-900 to-black opacity-90 z-0"></div>
           <div className="absolute inset-0 opacity-20 z-0" style={{ backgroundImage: 'url("https://picsum.photos/1920/1080?grayscale&blur=2")', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
           
