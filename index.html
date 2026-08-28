@@ -23,6 +23,18 @@
             }
         }
     </script>
+    
+    <!-- SOLUCIÓN DEFINITIVA: Inyectamos las variables de Google Cloud directamente al navegador -->
+    <!-- Esto evita que Vercel intente crear servidores y falle con Error 500 -->
+    <script>
+        window.process = {
+            env: {
+                GOOGLE_CLOUD_PROJECT: 'elite-tint-project',
+                GOOGLE_CLOUD_LOCATION: 'us-central1'
+            }
+        };
+    </script>
+
     <script type="importmap">
     {
         "imports": {
