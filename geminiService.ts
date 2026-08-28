@@ -44,11 +44,9 @@ ACTION REQUIRED:
 ONCE YOU HAVE GATHERED AT LEAST THE MAKE, MODEL, YEAR, AND WINDOWS, you MUST call the 'submitQuoteRequest' function to send this data to the team. Do not call it before you have these 4 pieces of information.
 `;
 
-// Inicializamos la variable vacía para que no se ejecute durante el build de Vercel
 let aiInstance: GoogleGenAI | null = null;
 
 export const createChatSession = (): Chat => {
-  // Solo inicializamos Gemini cuando la función es llamada (cuando el usuario abre el chat)
   if (!aiInstance) {
     aiInstance = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
   }
