@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat } from '@google/genai';
-import { createChatSession } from '../services/geminiService';
-import { Message } from '../types';
-import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons';
+import { createChatSession } from '../services/geminiService.ts';
+import { Message } from '../types.ts';
+import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons.tsx';
 
 const formatText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -250,3 +250,5 @@ export const Chatbot: React.FC = () => {
         {isOpen ? <CloseIcon className="w-6 h-6" /> : <ChatIcon className="w-7 h-7" />}
       </button>
     </div>
+  );
+};
