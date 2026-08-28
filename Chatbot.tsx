@@ -250,5 +250,3 @@ export const Chatbot: React.FC = () => {
         {isOpen ? <CloseIcon className="w-6 h-6" /> : <ChatIcon className="w-7 h-7" />}
       </button>
     </div>
-  );
-};
