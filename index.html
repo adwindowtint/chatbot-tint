@@ -24,17 +24,8 @@
         }
     </script>
     
-    <!-- SOLUCIÓN DEFINITIVA: Inyectamos las variables de Google Cloud directamente al navegador -->
-    <!-- Esto evita que Vercel intente crear servidores y falle con Error 500 -->
-    <script>
-        window.process = {
-            env: {
-                GOOGLE_CLOUD_PROJECT: 'elite-tint-project',
-                GOOGLE_CLOUD_LOCATION: 'us-central1'
-            }
-        };
-    </script>
-
+    <!-- Este importmap descarga las librerías adaptadas para el navegador -->
+    <!-- Soluciona todos los errores de compatibilidad de Google GenAI -->
     <script type="importmap">
     {
         "imports": {
