@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat } from '@google/genai';
-// CORRECCIÓN: Se agregó '../' para salir de la carpeta components
+// CORRECCIÓN: Usamos '../' para salir de la carpeta components y entrar a services
 import { createChatSession } from '../services/geminiService';
+// CORRECCIÓN: Usamos '../' para salir de la carpeta components y buscar types.ts en la raíz
 import { Message } from '../types';
 import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons';
 
