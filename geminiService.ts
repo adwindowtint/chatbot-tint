@@ -1,5 +1,10 @@
 import { GoogleGenAI, Chat, Type, FunctionDeclaration } from '@google/genai';
 
+// Initialize the Gemini client.
+// The API key is expected to be provided by the environment.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
+
+// Define the tool that Gemini can call when it has gathered enough information
 export const submitQuoteDeclaration: FunctionDeclaration = {
   name: 'submitQuoteRequest',
   description: 'Submits a customer quote request to the business owner via Telegram. Call this ONLY when you have gathered the vehicle Make, Model, Year, and the specific windows they want tinted.',
@@ -44,18 +49,12 @@ ACTION REQUIRED:
 ONCE YOU HAVE GATHERED AT LEAST THE MAKE, MODEL, YEAR, AND WINDOWS, you MUST call the 'submitQuoteRequest' function to send this data to the team. Do not call it before you have these 4 pieces of information.
 `;
 
-let aiInstance: GoogleGenAI | null = null;
-
 export const createChatSession = (): Chat => {
-  if (!aiInstance) {
-    aiInstance = new GoogleGenAI({ apiKey: process.env.API_KEY, vertexai: true });
-  }
-  
-  return aiInstance.chats.create({
+  return ai.chats.create({
     model: 'gemini-2.5-flash',
     config: {
       systemInstruction: SYSTEM_INSTRUCTION,
-      temperature: 0.7,
+      temperature: 0.7, // Slightly creative but mostly focused
       tools: [{ functionDeclarations: [submitQuoteDeclaration] }]
     },
   });

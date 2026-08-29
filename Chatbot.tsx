@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat } from '@google/genai';
-import { createChatSession } from '../services/geminiService';
-import { Message } from '../types';
-import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons';
+import { createChatSession } from '../services/geminiService.ts';
+import { Message } from '../types.ts';
+import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons.tsx';
 
+// Helper to parse simple markdown-like bolding for better chat display
 const formatText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
@@ -24,10 +25,12 @@ export const Chatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Initialize chat session only once when opened for the first time
   useEffect(() => {
     if (isOpen && !chatRef.current) {
       try {
         chatRef.current = createChatSession();
+        // Add initial greeting
         setMessages([
           {
             id: Date.now().toString(),
@@ -50,12 +53,14 @@ export const Chatbot: React.FC = () => {
     }
   }, [isOpen]);
 
+  // Auto-scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
+  // Focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -79,13 +84,17 @@ export const Chatbot: React.FC = () => {
 
     try {
       const response = await chatRef.current.sendMessage({ message: trimmedInput });
+      
       let responseText = response.text || "";
 
+      // Check if the model decided to call our Telegram function
       if (response.functionCalls && response.functionCalls.length > 0) {
         const call = response.functionCalls[0];
         
         if (call.name === 'submitQuoteRequest') {
           const args = call.args as any;
+          
+          // Using the provided Telegram credentials
           const telegramToken = "8731741722:AAGojwSHeg6MMcbrnn4AHjsmdnXZfGmJZPA";
           const chatId = "7682322729";
 
@@ -93,6 +102,7 @@ export const Chatbot: React.FC = () => {
             const text = `🚨 *Nueva Solicitud de Cotización* 🚨\n\n*Vehículo:* ${args.year} ${args.make} ${args.model}\n*Vidrios:* ${args.windows}\n*Nombre:* ${args.customerName || 'No provisto'}\n*Teléfono:* ${args.customerPhone || 'No provisto'}`;
             
             try {
+              // Send the data to Telegram
               await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -103,6 +113,7 @@ export const Chatbot: React.FC = () => {
             }
           }
 
+          // Inform Gemini that the action was successful so it can reply to the user
           const followUp = await chatRef.current.sendMessage({ 
             message: `System: The quote request was successfully sent to the team via Telegram. Please confirm this to the user politely.` 
           });
@@ -146,8 +157,11 @@ export const Chatbot: React.FC = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      {/* Chat Window */}
       {isOpen && (
         <div className="mb-4 w-[350px] sm:w-[400px] h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ease-in-out transform origin-bottom-right">
+          
+          {/* Header */}
           <div className="bg-brand-950 text-white p-4 flex justify-between items-center shadow-md z-10">
             <div className="flex items-center space-x-2">
               <div className="bg-brand-500 p-1.5 rounded-full">
@@ -170,6 +184,7 @@ export const Chatbot: React.FC = () => {
             </button>
           </div>
 
+          {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map((msg) => (
               <div 
@@ -208,6 +223,7 @@ export const Chatbot: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Input Area */}
           <div className="p-3 bg-white border-t border-gray-100">
             <div className="flex items-center bg-gray-50 border border-gray-200 rounded-full px-2 py-1 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent transition-all">
               <input
@@ -240,6 +256,7 @@ export const Chatbot: React.FC = () => {
         </div>
       )}
 
+      {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-brand-500/50 ${
