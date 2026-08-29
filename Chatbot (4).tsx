@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat } from '@google/genai';
-import { createChatSession } from './geminiService';
-import { Message } from './types';
+import { createChatSession } from '../services/geminiService';
+import { Message } from '../types';
 import { SendIcon, ChatIcon, CloseIcon, SparklesIcon } from './Icons';
 
 const formatText = (text: string) => {

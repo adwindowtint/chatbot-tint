@@ -1,13 +1,26 @@
-mport { defineConfig } from 'vite';
+import path from 'path';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY || ''),
-    'process.env.GOOGLE_CLOUD_PROJECT': JSON.stringify('elite-tint-project'),
-    'process.env.GOOGLE_CLOUD_LOCATION': JSON.stringify('us-central1'),
-    // Esta es la llave final que pide la librería de Google para dejarnos compilar
-    'process.env.PROXY_HEADER': JSON.stringify('x-proxy-header')
-  }
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '');
+    return {
+      define: {
+        // This is just generic value for the GEMINI API key.
+        // This is not used at all, and can be ignored!
+        'process.env.API_KEY' : JSON.stringify('api-key-this-is-not-used-can-be-ignored!'),
+      },
+      server: {
+        proxy: {
+          //Target your Node.js backend
+          '/api-proxy': 'http://localhost:5000',
+          '/ws-proxy': {target: 'ws://localhost:5000', ws: true},
+        },
+      },
+      plugins: react(),
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, '.'),
+        }
+      }
+    };
 });
