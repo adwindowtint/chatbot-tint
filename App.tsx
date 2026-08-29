@@ -1,5 +1,6 @@
 import React from 'react';
-import { Chatbot } from './Chatbot';
+// CORRECCIÓN: Se agregó './components/' a la ruta
+import { Chatbot } from './components/Chatbot';
 
 const App: React.FC = () => {
   return (
